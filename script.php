@@ -6,6 +6,8 @@ jimport( 'joomla.application.component.model');
 defined('_JEXEC') or die('Restricted access');
 
 
+
+
 	class com_excel2jsInstallerScript
 	{
 

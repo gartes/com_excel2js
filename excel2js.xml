@@ -1,26 +1,27 @@
 <?xml version="1.0" encoding="utf-8"?>
 <extension type="component" version="3.0" method="upgrade">
-	<name>Excel2JS</name>
-  <author>Addonshop</author>
-  <creationDate>21 January 2018</creationDate>
-  <copyright>joom-shopping.com</copyright>
-  <license>GNU GPL v3</license>
-  <authorEmail>info@joom-shopping.com</authorEmail>
-  <authorUrl>http://joom-shopping.com</authorUrl>
-	<version>3.1.6</version>	
-	<description>Компонент предназначен для импорта товаров из Excel в JoomShopping 3 и выше. Joomla 2.5 - 3.8</description>
+    <name>Excel2JS</name>
+    <author>Addonshop</author>
+    <creationDate>21 January 2018</creationDate>
+    <copyright>joom-shopping.com</copyright>
+    <license>GNU GPL v3</license>
+    <authorEmail>info@joom-shopping.com</authorEmail>
+    <authorUrl>http://joom-shopping.com</authorUrl>
+    <version>3.1.6</version>
+    <description>Компонент предназначен для импорта товаров из Excel в JoomShopping 3 и выше. Joomla 2.5 - 3.8
+    </description>
     <scriptfile>script.php</scriptfile>
     <!-- Site Main File Copy Section -->
     <install>
-      <sql>
-         <file charset="utf8" driver="mysql">install.sql</file>
-      </sql>
-   </install>
-   <uninstall>
-      <sql>
-         <file charset="utf8" driver="mysql">uninstall.sql</file>
-      </sql>
-   </uninstall>
+        <sql>
+            <file charset="utf8" driver="mysql">install.sql</file>
+        </sql>
+    </install>
+    <uninstall>
+        <sql>
+            <file charset="utf8" driver="mysql">uninstall.sql</file>
+        </sql>
+    </uninstall>
     <files folder="site">
         <filename>excel2js.php</filename>
     </files>
@@ -28,22 +29,22 @@
         <!-- Administration Menu Section -->
         <menu>IMPORTJS</menu>
         <submenu>
-				<menu view="excel2js">IMPORT</menu>
-			    <menu view="export">EXPORT</menu>
-			    <menu view="config">CONFIGURATIONS</menu>
-			    <menu view="backup">RECOVER</menu>
-			    <menu view="yml">YML</menu>
-			    <menu view="vk">VK</menu>
-			    <menu view="support">SUPPORT</menu>
+            <menu view="excel2js">IMPORT</menu>
+            <menu view="export">EXPORT</menu>
+            <menu view="config">CONFIGURATIONS</menu>
+            <menu view="backup">RECOVER</menu>
+            <menu view="yml">YML</menu>
+            <menu view="vk">VK</menu>
+            <menu view="support">SUPPORT</menu>
         </submenu>
 
         <files folder="admin">
-    <!-- Site Main File Copy Section -->
+            <!-- Site Main File Copy Section -->
             <filename>index.html</filename>
             <filename>access.xml</filename>
             <filename>config.xml</filename>
-			<filename>install.sql</filename>
-			<filename>uninstall.sql</filename>
+            <filename>install.sql</filename>
+            <filename>uninstall.sql</filename>
             <filename>excel2js.php</filename>
             <filename>controller.php</filename>
             <folder>views</folder>
@@ -53,16 +54,16 @@
             <folder>export</folder>
             <folder>xls</folder>
             <folder>models</folder>
-			<folder>assets</folder>
-			<folder>config</folder>
+            <folder>assets</folder>
+            <folder>config</folder>
         </files>
 
-		<languages folder="admin">
-			<language tag="ru-RU">language/ru-RU/ru-RU.com_excel2js.sys.ini</language>
-			<language tag="ru-RU">language/ru-RU/ru-RU.com_excel2js.ini</language>
-			<language tag="en-GB">language/en-GB/en-GB.com_excel2js.sys.ini</language>
-			<language tag="en-GB">language/en-GB/en-GB.com_excel2js.ini</language>
-		</languages>
+        <languages folder="admin">
+            <language tag="ru-RU">language/ru-RU/ru-RU.com_excel2js.sys.ini</language>
+            <language tag="ru-RU">language/ru-RU/ru-RU.com_excel2js.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_excel2js.sys.ini</language>
+            <language tag="en-GB">language/en-GB/en-GB.com_excel2js.ini</language>
+        </languages>
     </administration>
 
 </extension>
