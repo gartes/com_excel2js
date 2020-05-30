@@ -21,7 +21,8 @@
 		ini_set( "display_errors", "0" );
 		ini_set( "display_startup_errors", "0" );
 	}
-	
+	use PhpOffice\PhpSpreadsheet\Spreadsheet;
+	use PhpOffice\PhpSpreadsheet\Writer\Xlsx;
 	
 	class Excel2jsController extends JControllerLegacy
 	{
@@ -107,16 +108,58 @@
 			$app    = \Joomla\CMS\Factory::getApplication();
 			$params = JComponentHelper:: getParams( 'com_excel2js' );
 			
+			$format = $app->input->get('format' , 'html' ) ;
+			$star_line = $app->input->get('star_line' ,  0 )  ;
+			$part = $app->input->get('part' ,  0 )  ;
+			$rows_processed = $app->input->get('rows_processed' ,  0 )  ;
+			
+			
 			$redirect = false ;
+			
+			
+			$pathOutputDir = '/tmp/yurkas_temp';
+			$xlsxOutputFileName = '/yurkas'.($part?'_part_'.$part: null ).'.xlsx' ;
+			$xlsxUrlOutputFile = $pathOutputDir . $xlsxOutputFileName ;
+			$xlsxPathOutput = JPATH_ROOT .  $pathOutputDir  ;
+			$xlsxPathOutputFile = JPATH_ROOT .  $pathOutputDir . $xlsxOutputFileName ;
+			
+			if( !$part )
+			{
+				# Проверяем директорию и создаем
+				if( \Joomla\CMS\Filesystem\Folder::exists( $xlsxPathOutput ) )
+				{
+					\Joomla\CMS\Filesystem\Folder::delete( $xlsxPathOutput ) ;
+				}#END IF
+				\Joomla\CMS\Filesystem\Folder::create( $xlsxPathOutput , $mode = 0755 ) ;
+			}#END IF
 			
 			$file                     = $params->get( 'url_urkas', 'https://yurkas.by/export/doors.csv' );
 			$count_string_in_csv_file = $params->get( 'count_string_in_csv_file', '500' );
 			
+			$delimiter = $params->get( 'yurkas_delimiter', ',' );
+			
+			$parseResult = [] ;
+			$parseResult['data'] = [] ;
+			
 			if( ( $fp = fopen( $file, "r" ) ) !== false )
 			{
+				$i =  0  ;
+				$new_star_line = 0 ;
 				while (( $data = fgetcsv( $fp, 0, ";" ) ) !== false)
 				{
-					$list[] = $data;
+					# Строку в формате CSV и возвращает массив
+					$arrData = str_getcsv($data[0] , $delimiter , '"' );
+					# Добавить строку заголовков
+					if( $i == 0  )
+					{
+						$parseResult['data'][] = $arrData ;
+					}#END IF
+					if( $i > $star_line && count( $parseResult['data'] ) < $count_string_in_csv_file   )
+					{
+						$parseResult['data'][] = $arrData ;
+						$new_star_line = $i ;
+					}#END IF
+					$i ++ ;
 				}
 				fclose( $fp );
 			}
@@ -126,59 +169,55 @@
 				$redirect = true ;
 			}
 			
-			if( !count( $list ) )
+			if( !$i )
 			{
 				$app->enqueueMessage('Количество строк в файле '.$file .' равно нулю', 'error');
 				$redirect = true ;
 			}#END IF
 			
+			# число строк в прайсе CSV
+			$data['forms']['all_count_price'] = $i ;
+			# Строк в файле excel
+			$data['count'] = count( $parseResult['data'] ) ;
+			# Начинать со строки
+			$data['forms']['star_line'] = $new_star_line + 1   ;
+			$data['forms']['part']= $part + 1  ;
+			$data['forms']['rows_processed']= $rows_processed + $data['count'] ;
+			$data['xlsxOutputFile'] = $xlsxPathOutputFile   ;
+			$data['files'][] = array(
+				'url' => JUri::root(true).$xlsxUrlOutputFile
+			);
 			
 			
 			if( $redirect )
 			{
-				$app->redirect( JURI:: base(true) . "/index.php?option=com_excel2js&view=yurkas"  );
+				if( $format == 'html' )
+				{
+					$app->redirect( JURI:: base(true) . "/index.php?option=com_excel2js&view=yurkas"  );
+				}#END IF
+				echo new JResponseJson( null , JText::_('TASK_ERROR_YURKAS'), true);
+				die();
 			}#END IF
 			
-			$pathDir = JPATH_ROOT.'/yurkas_temp';
-			\Joomla\CMS\Filesystem\Folder::exists( $pathDir ) ;
+			# запись данных и создание xlsx файлов
+			# https://hard-skills.ru/other/excel-phpspreadsheet/
+			require_once JPATH_COMPONENT_ADMINISTRATOR . '/libraries/vendor/autoload.php';
+			//Создаем экземпляр класса электронной таблицы
+			$spreadsheet = new Spreadsheet();
+			//Получаем текущий активный лист
+			$spreadsheet->getActiveSheet()
+				# https://phpspreadsheet.readthedocs.io/en/latest/topics/accessing-cells/
+				->fromArray(
+					$parseResult['data'] ,  // The data to set
+					NULL,        // Array values with this value will not be set
+					'A1'         // Top left coordinate of the worksheet range where
+				//    we want to set these values (default is A1)
+				);
+            $writer = new Xlsx($spreadsheet);
+			$writer->save( $xlsxPathOutputFile );
 			
-			echo '<pre>'; print_r( $list ); echo '</pre>' . __FILE__ . ' ' . __LINE__ . '  ((  ::' . __FUNCTION__ . ' - $params ))<br>';
-			die( '<b>DIE : ' . __FILE__ . ' ' . __LINE__ . '  => ' . __CLASS__ . '::' . __FUNCTION__ . '</b>' );
-			
-			
-			$path = JPATH_ROOT . '/tmp/';
-//			$file = $path.'doors.csv' ;
-			$fileSave = $path . 'excel_file.xlsx';
-			
-			echo '<pre>';
-			print_r( $file );
-			echo '</pre>' . __FILE__ . ' ' . __LINE__ . '  ((  ::' . __FUNCTION__ . ' - $file ))<br>';
-			die( '<b>DIE : ' . __FILE__ . ' ' . __LINE__ . '  => ' . __CLASS__ . '::' . __FUNCTION__ . '</b>' );
-			
-			try
-			{
-				require_once JPATH_COMPONENT_ADMINISTRATOR . '/libraries/vendor/autoload.php';
-				$reader      = PhpOffice\PhpSpreadsheet\IOFactory::createReader( 'Csv' );
-				$objPHPExcel = $reader->load( $file );
-				$objWriter   = \PhpOffice\PhpSpreadsheet\IOFactory::createWriter( $objPHPExcel, 'Xlsx' );
-				$objWriter->save( $fileSave );
-				
-				
-			}
-			catch (Exception $e)
-			{
-				// Executed only in PHP 5, will not be reached in PHP 7
-				echo 'Выброшено исключение: ', $e->getMessage(), "\n";
-				echo '<pre>';
-				print_r( $e );
-				echo '</pre>' . __FILE__ . ' ' . __LINE__;
-				die( __FILE__ . ' ' . __LINE__ );
-			}
-			
-			
-			die( '<b>DIE : ' . __FILE__ . ' ' . __LINE__ . '  => ' . __CLASS__ . '::' . __FUNCTION__ . '</b>' );
-			
-			
+			echo new JResponseJson( $data , JText::_('OK_YURKAS') );
+			die();
 		}
 		
 		function update_files ()

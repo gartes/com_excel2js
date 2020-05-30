@@ -68,5 +68,9 @@
     
     <input type="hidden" name="option" value="com_excel2js">
     <input type="hidden" name="task" value="upload_yurkas">
-    <input type="hidden" name="method" value="html">
+    <input type="hidden" name="format" value="html">
+    <input type="hidden" name="star_line" value="0">
+    <input type="hidden" name="part" value="0">
+    <input type="hidden" name="all_count_price" value="0">
+    <input type="hidden" name="rows_processed" value="0">
 </form>

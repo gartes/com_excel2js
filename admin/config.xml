@@ -257,6 +257,18 @@
 			showon=""
 			filter="raw" />
 
+		<field name="yurkas_delimiter"
+			type="text"
+			default=","
+			class="yurkas_delimiter "
+			readonly=""
+			required=""
+			label="CONFIG_YURKAS_DELIMITER"
+			description="CONFIG_YURKAS_DELIMITER_DESC"
+			showon=""
+			filter="raw" />
+
+
 
 		<field name="yurkas_profile"
 			   addfieldpath="administrator/components/com_excel2js/config" type="profilelist" default="" size="1"
