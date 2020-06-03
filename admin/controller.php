@@ -169,6 +169,8 @@
 				$redirect = true ;
 			}
 			
+			
+			
 			if( !$i )
 			{
 				$app->enqueueMessage('Количество строк в файле '.$file .' равно нулю', 'error');

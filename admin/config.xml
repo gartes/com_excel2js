@@ -287,8 +287,81 @@
 			   showon=""
 			   filter="raw"/>
 
+		<field 
+			name="header_handler"
+			type="subform"
+			label="CONFIG_HEADER_HANDLER"
+			description="CONFIG_HEADER_HANDLER_DESC"
+			required=""
+			message=""
+			default=""
+			multiple="true"
+			min="0"
+			max="10"
+			groupByFieldset="false"
+			buttons="add,remove,move"
+			>
+			<form>
+				<field name="column_name"
+					type="list"
+					default=""
+					required="1"
+					label="CONFIG_COLUMN_NAME"
+					description="CONFIG_COLUMN_NAME_DESC"
+					class="column_name "
+					multiple="false"
+					readonly=""
+					showon=""
+					filter="raw" >
+						<option value="">Please Select</option>
+						<option value="A">A</option>
+						<option value="B">B</option>
+						<option value="C">C</option>
+						<option value="D">D</option>
+						<option value="E">E</option>
+						<option value="F">F</option>
+						<option value="G">G</option>
+						<option value="H">H</option>
+					</field>
+				<field name="column_operaton"
+					type="list"
+					default=""
+					required="1"
+					label="CONFIG_COLUMN_OPERATON"
+					description="CONFIG_COLUMN_OPERATON_DESC"
+					class="column_operaton "
+					multiple="false"
+					readonly=""
+					showon=""
+					filter="raw" >
+						<option value="">Please Select</option>
+						<option value="skip">CONFIG_COLUMN_OPERATON_OPTION_SKIP</option>
+						<option value="replace">CONFIG_COLUMN_OPERATON_OPTION_REPLACE</option>
+						<option value="3">CONFIG_COLUMN_OPERATON_OPTION_3</option>
+					</field>
+
+					<field name="value_replace"
+						type="text"
+						default=""
+						class="value_replace "
+						readonly=""
+						required=""
+						label="CONFIG_VALUE_REPLACE"
+						description="CONFIG_VALUE_REPLACE_DESC"
+						showon=""
+						filter="raw" />
+	
+	
+			</form>
+		</field>
+		 
+
+			
+			
 
 	</fieldset>
+<!-- YURKAS ==============================================================================-->
+
 
 	<fieldset
 			name="permissions"

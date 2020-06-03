@@ -38,10 +38,16 @@ class Excel2jsModelExport extends JModelLegacy
         $this->csv_convert = $params->get('csv_convert', 1);
         $this->row_limit = $this->input->get('row_limit', 0, 'int') - 1;
         $this->product_status = $this->input->get('product_status', -1, 'int');
-
-        $this->manufacturers = (array)$_POST['manufacturer_id'];
-        $this->manufacturers = ArrayHelper::toInteger($this->manufacturers);
-        $this->manufacturers = implode(",", $this->manufacturers);
+		
+        
+        
+        
+	    if( !isset( $_POST['manufacturer_id'] ) ) $_POST['manufacturer_id'] = null ; #END IF
+	    $this->manufacturers = (array) $_POST[ 'manufacturer_id' ];
+	    $this->manufacturers = ArrayHelper::toInteger( $this->manufacturers );
+	    $this->manufacturers = implode( ",", $this->manufacturers );
+	    
+        
         $this->get_version();
 
         if (is_array(@$_REQUEST['category'])) {
@@ -73,37 +79,62 @@ class Excel2jsModelExport extends JModelLegacy
     {
         $this->_db->setQuery("SELECT id FROM #__excel2js WHERE default_profile = 1");
         $id = $this->_db->loadResult();
-        if (!$id) {
-            $this->_db->setQuery("UPDATE #__excel2js SET default_profile = 1 LIMIT 1");
-            $this->_db->execute();
-            $this->config_table->load(1, 'default_profile');
-        } else
-            $this->config_table->load($id);
-
-        $this->active_fields = $this->config_table->active;
-        $config = unserialize($this->config_table->config);
-        $config->profile_name = $this->config_table->profile;
-        $config->profile_id = $this->config_table->id;
-        if (!$config->language) {
-            $languages = $this->getLanguages();
-            if (!in_array('ru-Ru', $languages)) {
-                $config->language = current($languages)->language;
-            }
-        }
-        if (!@$config->currency_rate) {
-            $config->currency_rate = 1;
-        }
-        $this->_db->setQuery("SELECT f.name,f.extra_id, `name_{$config->language}` as attr_name
+	
+	    if (!$id) {
+		    $this->_db->setQuery("UPDATE #__excel2js SET default_profile = 1 LIMIT 1");
+		    $this->_db->execute();
+		    $this->config_table->load(1, 'default_profile');
+	    } else{
+		    $this->config_table->load($id);
+	    }
+		   
+	
+	    $this->active_fields = $this->config_table->active;
+	    $config = unserialize($this->config_table->config);
+	    $config->profile_name = $this->config_table->profile;
+	    $config->profile_id = $this->config_table->id;
+	
+	    if (!$config->language) {
+		    $languages = $this->getLanguages();
+		    if (!in_array('ru-Ru', $languages)) {
+			    $config->language = current($languages)->language;
+		    }
+	    }
+	
+	    if (!@$config->currency_rate) {
+		    $config->currency_rate = 1;
+	    }
+	
+	    $this->_db->setQuery("SELECT f.name,f.extra_id, `name_{$config->language}` as attr_name
 							  FROM #__excel2js_fields as f
 		                      LEFT JOIN #__jshopping_attr as a ON a.attr_id=f.extra_id
 							  WHERE f.id IN ($this->active_fields) AND f.type = 'independ' ORDER BY f.id");
-        $this->independ = $this->_db->loadObjectList('extra_id');
-
-        $this->_db->setQuery("SELECT f.name,f.extra_id, `name_{$config->language}` as attr_name
+	    $this->independ = $this->_db->loadObjectList('extra_id');
+	
+	
+	    $this->_db->setQuery("SELECT f.name,f.extra_id, `name_{$config->language}` as attr_name
 							  FROM #__excel2js_fields as f
 		                      LEFT JOIN #__jshopping_attr as a ON a.attr_id=f.extra_id
 							  WHERE f.id IN ($this->active_fields) AND f.type = 'depend' ORDER BY f.id");
-        $this->depend = $this->_db->loadObjectList('extra_id');
+	    $this->depend = $this->_db->loadObjectList('extra_id');
+	    
+	    
+     
+//        echo'<pre>';print_r( $this->depend );echo'</pre>'.__FILE__.' '.__LINE__.'  ((  ::'.__FUNCTION__.' - $id ))<br>';
+//        die('<b>DIE : '.__FILE__.' '.__LINE__.'  => '.__CLASS__.'::'.__FUNCTION__.'</b>' );
+        
+        
+        
+        
+        
+
+        
+       
+       
+        
+
+        
+        
 
         $this->_db->setQuery("SELECT f.name
 							  FROM #__excel2js_fields as f

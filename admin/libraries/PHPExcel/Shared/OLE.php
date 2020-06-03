@@ -1,4 +1,5 @@
 <?php
+
 /* vim: set expandtab tabstop=4 shiftwidth=4: */
 // +----------------------------------------------------------------------+
 // | PHP Version 4                                                        |
@@ -275,20 +276,23 @@ class PHPExcel_Shared_OLE
 			$name = str_replace("\x00", "", $nameUtf16);
 			$type = self::_readInt1($fh);
 			switch ($type) {
-			case self::OLE_PPS_TYPE_ROOT:
-				$pps = new PHPExcel_Shared_OLE_PPS_Root(null, null, array());
-				$this->root = $pps;
-				break;
-			case self::OLE_PPS_TYPE_DIR:
-				$pps = new PHPExcel_Shared_OLE_PPS(null, null, null, null, null,
-								   null, null, null, null, array());
-				break;
-			case self::OLE_PPS_TYPE_FILE:
-				$pps = new PHPExcel_Shared_OLE_PPS_File($name);
-				break;
-			default:
-				continue;
+
+				case self::OLE_PPS_TYPE_ROOT:
+					$pps = new PHPExcel_Shared_OLE_PPS_Root(null, null, array());
+					$this->root = $pps;
+					break;
+				case self::OLE_PPS_TYPE_DIR:
+					$pps = new PHPExcel_Shared_OLE_PPS(null, null, null, null, null,
+									   null, null, null, null, array());
+					break;
+				case self::OLE_PPS_TYPE_FILE:
+					$pps = new PHPExcel_Shared_OLE_PPS_File($name);
+					break;
+				default:
+					continue 2;
 			}
+
+
 			fseek($fh, 1, SEEK_CUR);
 			$pps->Type    = $type;
 			$pps->Name    = $name;
