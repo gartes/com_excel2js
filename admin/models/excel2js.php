@@ -3476,8 +3476,6 @@ exit();*/
 		 */
 		function depended_images( $depended_images , $product_id )
 		{
-
-
 			if( $this->old_version )
 			{
 				return 0;
@@ -3485,9 +3483,6 @@ exit();*/
 
 			$depended_images = str_replace( "," , "|" , $depended_images );
 			$depended_images = explode( "|" , $depended_images );
-
-
-
 			foreach( $depended_images as $key => &$image_name )
 			{
 				# Если прямая ссылка
@@ -3498,19 +3493,12 @@ exit();*/
 				}
 
 				$image_name = \GComHelpers\Helper::normaliseFileName( $image_name , $this->image_product_path );
-
-
-
-
 				if( !file_exists( $this->image_product_path . $image_name ) )
 				{
 					$this->error_log( "Отсутствует изображение товара. Строка - $this->row. {$this->image_product_path}{$image_name}" );
 					unset( $depended_images[ $key ] );
 					continue;
 				}
-
-
-
 				# Создание миниатюр
 				$this->make_thumb( $image_name );
 			}
