@@ -286,6 +286,31 @@
 			   description="CONFIG_COUNT_STRING_IN_CSV_FILE_DESC"
 			   showon=""
 			   filter="raw"/>
+		<field name="max_count_part_file"
+			type="text"
+			default=""
+			class="max_count_part_file "
+			readonly=""
+			required=""
+			label="CONFIG_MAX_COUNT_PART_FILE"
+			description="CONFIG_MAX_COUNT_PART_FILE_DESC"
+			showon=""
+			filter="raw" />
+			
+			
+		<!--<field name="download_meta_data"
+			type="radio"
+			default="0"
+			label="CONFIG_DOWNLOAD_META_DATA"
+			description="CONFIG_DOWNLOAD_META_DATA_DESC"
+			class="btn-group btn-group-yesno">
+			<option value="0">JNO</option>
+			<option value="1">JYES</option>
+
+		</field>-->
+		
+		 
+		
 
 		<field 
 			name="header_handler"
@@ -302,26 +327,39 @@
 			buttons="add,remove,move"
 			>
 			<form>
-				<field name="column_name"
+				<field name="_column_exc"
 					type="list"
 					default=""
 					required="1"
-					label="CONFIG_COLUMN_NAME"
-					description="CONFIG_COLUMN_NAME_DESC"
+					label="CONFIG__COLUMN_EXC"
+					description="CONFIG__COLUMN_EXC_DESC"
 					class="column_name "
 					multiple="false"
 					readonly=""
 					showon=""
 					filter="raw" >
 						<option value="">Please Select</option>
-						<option value="A">A</option>
-						<option value="B">B</option>
-						<option value="C">C</option>
-						<option value="D">D</option>
-						<option value="E">E</option>
-						<option value="F">F</option>
-						<option value="G">G</option>
-						<option value="H">H</option>
+						<option value="0">A-0</option>
+						<option value="1">B-1</option>
+						<option value="2">C-2</option>
+						<option value="3">D-3</option>
+						<option value="4">E-4</option>
+						<option value="5">F-5</option>
+						<option value="6">G-6</option>
+						<option value="7">H-7</option>
+						<option value="8">I-8</option>
+						<option value="9">J-9</option>
+						<option value="10">K-10</option>
+						<option value="11">L-11</option>
+						<option value="12">M-12</option>
+						<option value="13">N-13</option>
+						<option value="14">O-14</option>
+						<option value="15">P-15</option>
+						<option value="16">Q-16</option>
+						<option value="17">R-17</option>
+						<option value="18">S-18</option>
+						<option value="19">T-19</option>
+						<option value="20">U-20</option>
 					</field>
 				<field name="column_operaton"
 					type="list"
@@ -335,12 +373,15 @@
 					showon=""
 					filter="raw" >
 						<option value="">Please Select</option>
+						<option value="copy">CONFIG_COLUMN_OPERATON_OPTION_COPY</option>
+						<option value="add">CONFIG_COLUMN_OPERATON_OPTION_ADD</option>
 						<option value="skip">CONFIG_COLUMN_OPERATON_OPTION_SKIP</option>
 						<option value="replace">CONFIG_COLUMN_OPERATON_OPTION_REPLACE</option>
-						<option value="3">CONFIG_COLUMN_OPERATON_OPTION_3</option>
-					</field>
+						<option value="replace_f">CONFIG_COLUMN_OPERATON_OPTION_REPLACE_F</option>
+						<option value="del">CONFIG_COLUMN_OPERATON_OPTION_DEL</option>
 
-					<field name="value_replace"
+					</field>
+				<field name="value_replace"
 						type="text"
 						default=""
 						class="value_replace "
@@ -350,6 +391,41 @@
 						description="CONFIG_VALUE_REPLACE_DESC"
 						showon=""
 						filter="raw" />
+
+				<field name="_column_past"
+					   type="list"
+					   default=""
+					   required=""
+					   label="CONFIG__COLUMN_PAST"
+					   description="CONFIG__COLUMN_PAST_DESC"
+					   class="column_name "
+					   multiple="false"
+					   readonly=""
+					   showon=""
+					   filter="raw" >
+					<option value="">Please Select</option>
+					<option value="0">A-0</option>
+					<option value="1">B-1</option>
+					<option value="2">C-2</option>
+					<option value="3">D-3</option>
+					<option value="4">E-4</option>
+					<option value="5">F-5</option>
+					<option value="6">G-6</option>
+					<option value="7">H-7</option>
+					<option value="8">I-8</option>
+					<option value="9">J-9</option>
+					<option value="10">K-10</option>
+					<option value="11">L-11</option>
+					<option value="12">M-12</option>
+					<option value="13">N-13</option>
+					<option value="14">O-14</option>
+					<option value="15">P-15</option>
+					<option value="16">Q-16</option>
+					<option value="17">R-17</option>
+					<option value="18">S-18</option>
+					<option value="19">T-19</option>
+					<option value="20">U-20</option>
+				</field>
 	
 	
 			</form>

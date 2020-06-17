@@ -111,13 +111,17 @@
 			$format = $app->input->get('format' , 'html' ) ;
 			$star_line = $app->input->get('star_line' ,  0 )  ;
 			$part = $app->input->get('part' ,  0 )  ;
+			$max_count_part_file = $params->get( 'max_count_part_file', false  );
+			
 			$rows_processed = $app->input->get('rows_processed' ,  0 )  ;
+			
 			
 			
 			$redirect = false ;
 			
 			
 			$pathOutputDir = '/tmp/yurkas_temp';
+			$pathOutputDir = '/administrator/components/com_excel2js/xls';
 			$xlsxOutputFileName = '/yurkas'.($part?'_part_'.$part: null ).'.xlsx' ;
 			$xlsxUrlOutputFile = $pathOutputDir . $xlsxOutputFileName ;
 			$xlsxPathOutput = JPATH_ROOT .  $pathOutputDir  ;
@@ -138,8 +142,12 @@
 			
 			$delimiter = $params->get( 'yurkas_delimiter', ',' );
 			
+			
 			$parseResult = [] ;
 			$parseResult['data'] = [] ;
+			
+			
+			
 			
 			if( ( $fp = fopen( $file, "r" ) ) !== false )
 			{
@@ -149,11 +157,14 @@
 				{
 					# Строку в формате CSV и возвращает массив
 					$arrData = str_getcsv($data[0] , $delimiter , '"' );
-					# Добавить строку заголовков
+					
+					# Добавить 1 строкой строку заголовков
 					if( $i == 0  )
 					{
 						$parseResult['data'][] = $arrData ;
 					}#END IF
+					
+					// Крутим пока не на брали нужное количество строк для Exsel файла
 					if( $i > $star_line && count( $parseResult['data'] ) < $count_string_in_csv_file   )
 					{
 						$parseResult['data'][] = $arrData ;
@@ -169,13 +180,15 @@
 				$redirect = true ;
 			}
 			
-			
-			
 			if( !$i )
 			{
 				$app->enqueueMessage('Количество строк в файле '.$file .' равно нулю', 'error');
 				$redirect = true ;
 			}#END IF
+			
+			
+			
+			
 			
 			# число строк в прайсе CSV
 			$data['forms']['all_count_price'] = $i ;
@@ -183,7 +196,13 @@
 			$data['count'] = count( $parseResult['data'] ) ;
 			# Начинать со строки
 			$data['forms']['star_line'] = $new_star_line + 1   ;
+			
 			$data['forms']['part']= $part + 1  ;
+			$data['max_count_part_file'] = $max_count_part_file   ;
+			
+			
+			
+			
 			$data['forms']['rows_processed']= $rows_processed + $data['count'] ;
 			$data['xlsxOutputFile'] = $xlsxPathOutputFile   ;
 			$data['files'][] = array(
@@ -200,6 +219,31 @@
 				echo new JResponseJson( null , JText::_('TASK_ERROR_YURKAS'), true);
 				die();
 			}#END IF
+			
+			
+			/**
+			 * Объеденить столбцы 
+			 * TODO Refactoring !!!
+			 */
+			
+			$CellValue = false ;
+			$CellValueParams =  $params->get('header_handler' , false ) ;
+			// Если есть задачи отпраляем каждую строку на обработку
+			if( !empty( (array)$CellValueParams ) )
+			{
+				require_once JPATH_COMPONENT_ADMINISTRATOR . '/helpers/CellValue.php';
+				$CellValue = new CellValue( $CellValueParams );
+				foreach ( $parseResult['data'] as $n => $datum )
+				{
+					$parseResult['data'][$n] = $CellValue->processRow( $datum ) ;
+				}#END FOREACH
+			}#END IF
+			
+			
+			
+			
+			
+			
 			
 			# запись данных и создание xlsx файлов
 			# https://hard-skills.ru/other/excel-phpspreadsheet/
@@ -221,6 +265,13 @@
 			echo new JResponseJson( $data , JText::_('OK_YURKAS') );
 			die();
 		}
+		
+		
+		
+		
+		
+		
+		
 		
 		function update_files ()
 		{

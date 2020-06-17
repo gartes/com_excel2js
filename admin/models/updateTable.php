@@ -1,7 +1,20 @@
 <?php
 
+	/**
+	 * Class updateTable
+	 * @since 3.9
+	 * @copyright
+	 * @license
+	 */
 class updateTable
 {
+	/**
+	 * updateTable constructor.
+	 * @param $table
+	 * @param $key
+	 * @param null $keyVal
+	 * @since 3.9
+	 */
     function __construct($table, $key, $keyVal = null)
     {
 

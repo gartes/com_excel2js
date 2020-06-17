@@ -62,6 +62,17 @@
         <label for="">Url загрузки файла CSV:</label>
         <input type="text" name="url" value="https://yurkas.by/export/doors.csv">
     </div>-->
+    
+    <div class="controls">
+        <div class="control-lbl">
+            <label for="part" >Количество листов</label>
+        </div>
+        <div class="control">
+            <input id="part" size="5" type="text" name="part" value="0">
+        </div>
+    </div>
+    
+    
     <div class="cont">
         <button type="submit">Закачать</button>
     </div>
@@ -73,7 +84,8 @@
     <input type="hidden" name="task" value="upload_yurkas">
     <input type="hidden" name="format" value="html">
     <input type="hidden" name="star_line" value="0">
-    <input type="hidden" name="part" value="0">
+    
+    
     <input type="hidden" name="all_count_price" value="0">
     <input type="hidden" name="rows_processed" value="0">
 </form>

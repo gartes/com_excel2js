@@ -23,10 +23,14 @@ class Excel2jsViewYurkas extends JViewLegacy {
 		
 		$title = $GLOBALS['component_name'].'. '.JText::_('YURKAS');
 		
-		
-		
 		JToolBarHelper :: preferences('com_excel2js');
 		JToolBarHelper :: title($title, 'logo');
+		
+		/*
+		echo'<pre>';print_r( $this );echo'</pre>'.__FILE__.' '.__LINE__.'  ((  ::'.__FUNCTION__.' - $this  ))<br>';
+		die('<b>DIE : '.__FILE__.' '.__LINE__.'  => '.__CLASS__.'::'.__FUNCTION__.'</b>' );*/
+		
+		
 		
 /*
 		$title = $GLOBALS['component_name'].'. '.JText::_('YML');

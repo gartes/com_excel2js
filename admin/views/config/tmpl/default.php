@@ -723,6 +723,40 @@ input[name="start"],input[name="end"]{
                         	<?php echo JHTML::_('select.booleanlist',  'images_load', '', @$this->config->images_load,JText::_('IMAGES_LOAD_ALL'),'Для новых и товаров без изображения') ?>
         				</fieldset>
                 	</li>
+                    
+                    
+                    <!-- загрузка изображений через крон  -->
+                    <li>
+                        <label><?php echo  JHTML::tooltip(JText::_('LOAD_IMG_CRON_HINT'), JText::_('LOAD_IMG_CRON'),'',JText::_('LOAD_IMG_CRON')); ?></label>
+                        <fieldset class="radio btn-group btn-group-yesno">
+			                <?php echo JHTML::_('select.booleanlist',  'load_img_cron', '', @$this->config->load_img_cron) ?>
+                        </fieldset>
+                    </li>
+                    
+                    
+                    <li>
+                        <label><?php echo  JHTML::tooltip(JText::_('PNG_TO_JPG_CONVERT_HINT'), JText::_('PNG_TO_JPG_CONVERT'),'',JText::_('PNG_TO_JPG_CONVERT')); ?></label>
+                        <fieldset class="radio btn-group btn-group-yesno">
+			                <?php echo JHTML::_('select.booleanlist',  'png_to_jpg_convert', '', @$this->config->png_to_jpg_convert) ?>
+                        </fieldset>
+                    </li>
+                    <li>
+                        <label><?php echo JHTML::tooltip( JText::_( 'PNG_TO_JPG_CONVERT_QUALITY_HINT' ), JText::_( 'PNG_TO_JPG_QUALITY_CONVERT' ), '', JText::_( 'PNG_TO_JPG_QUALITY_CONVERT' ) ); ?></label>
+                        <input class="ordering_input"
+                               
+                               type="text" name="png_to_jpg_convert_quality" size="17" maxlength="250"
+                               value="<?php echo isset( $this->config->png_to_jpg_convert_quality ) ? $this->config->png_to_jpg_convert_quality : 50 ?>"/>
+                    </li>
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
+                    
                     <li>
                         <label><?php echo  JHTML::tooltip(JText::_('OLD_IMAGES_DELETE_HINT'), JText::_('OLD_IMAGES_DELETE'),'',JText::_('OLD_IMAGES_DELETE')); ?></label>
                         <fieldset class="radio btn-group btn-group-yesno">
@@ -733,14 +767,38 @@ input[name="start"],input[name="end"]{
                 </fieldset>
 
 
+                 <fieldset class="config_groups">
+                     <legend>Метод импорта</legend>
+                     <li>
+                         <label>
+                             <?=JHTML::tooltip(JText::_('LINE_IMPORT_ON_HINT'), JText::_('LINE_IMPORT_ON'),'',JText::_('LINE_IMPORT_ON')); ?>
+                         </label>
+                         <fieldset class="radio btn-group btn-group-yesno">
+                             <?php echo JHTML::_('select.booleanlist',  'line_import_on', '', @$this->config->price_hint) ?>
+                         </fieldset>
+                     </li>
+
+                     <li>
+                         <label>
+                             <?= JHTML::tooltip(JText::_('LINE_IMPORT_ON_NUMBER_OF_LINES_HINT'), JText::_('LINE_IMPORT_ON_NUMBER_OF_LINES'), '', JText::_('LINE_IMPORT_ON_NUMBER_OF_LINES')); ?>
+                         </label>
+                         <input class="ordering_input"
+                                type="text" name="line_import_on_number_of_lines" size="17" maxlength="250"
+                                value="<?php echo isset($this->config->line_import_on_number_of_lines) ? $this->config->line_import_on_number_of_lines : 50 ?>"/>
+                     </li>
+                 </fieldset>
 
 
-                <li>
-                    <label><?php echo  JHTML::tooltip(JText::_('PRICE_LIST_HINT_HINT'), JText::_('PRICE_LIST_HINT'),'',JText::_('PRICE_LIST_HINT')); ?></label>
-                    <fieldset class="radio btn-group btn-group-yesno">
-                    	<?php echo JHTML::_('select.booleanlist',  'price_hint', '', @$this->config->price_hint) ?>
-    				</fieldset>
-            	</li>
+                 <fieldset class="config_groups">
+                     <legend>Другие настройки</legend>
+                     <li>
+                         <label><?php echo JHTML::tooltip(JText::_('PRICE_LIST_HINT_HINT'), JText::_('PRICE_LIST_HINT'), '', JText::_('PRICE_LIST_HINT')); ?></label>
+                         <fieldset class="radio btn-group btn-group-yesno">
+                             <?php echo JHTML::_('select.booleanlist', 'price_hint', '', @$this->config->price_hint) ?>
+                         </fieldset>
+                     </li>
+                 </fieldset>
+
              </ul>
     		 <input type="hidden" name="fields_list" id="fields_list" value="1,2,3" />
     		 <input type="hidden" name="new_profile_name" id="new_profile_name" value="" />

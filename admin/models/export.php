@@ -118,23 +118,6 @@ class Excel2jsModelExport extends JModelLegacy
 							  WHERE f.id IN ($this->active_fields) AND f.type = 'depend' ORDER BY f.id");
 	    $this->depend = $this->_db->loadObjectList('extra_id');
 	    
-	    
-     
-//        echo'<pre>';print_r( $this->depend );echo'</pre>'.__FILE__.' '.__LINE__.'  ((  ::'.__FUNCTION__.' - $id ))<br>';
-//        die('<b>DIE : '.__FILE__.' '.__LINE__.'  => '.__CLASS__.'::'.__FUNCTION__.'</b>' );
-        
-        
-        
-        
-        
-
-        
-       
-       
-        
-
-        
-        
 
         $this->_db->setQuery("SELECT f.name
 							  FROM #__excel2js_fields as f
@@ -331,6 +314,9 @@ class Excel2jsModelExport extends JModelLegacy
 
     function export()
     {
+
+
+
         $this->log = new stdClass();
         $this->log->cat = 0;
         $this->log->row = 0;
@@ -344,6 +330,8 @@ class Excel2jsModelExport extends JModelLegacy
         $this->mem_limit = $this->mem_limit > 100 * 1024 * 1024 ? 100 * 1024 * 1024 : $this->mem_limit;
         if (ini_get('memory_limit') == -1) $this->mem_limit = 120 * 1024 * 1024;
         $this->start_time = $this->last_upd = time();
+
+
 
         if (!$this->csv) {
             require_once(JPATH_ROOT . DS . 'administrator' . DS . 'components' . DS . 'com_excel2js' . DS . 'libraries' . DS . 'PHPExcel.php');
@@ -484,6 +472,8 @@ class Excel2jsModelExport extends JModelLegacy
                 $this->updateStat();
             }
         }
+
+
 
         if (!$this->csv) {
             $this->log->status = JText::_('CREATING_EXCEL_FILE');

@@ -307,6 +307,8 @@ case 6:
         }
 
 		function showResponse(responseText, statusText)  {
+
+            console.log( responseText )
 			if(responseText.text=='No')
 				return false;
 			if(!responseText){
@@ -348,7 +350,7 @@ case 6:
 		});
 
 
-		 if(jQuery("input[name=make_thumb]:checked").val()==1)
+		 if(jQuery("input[name=make_thumb]:checked").val()===1)
                jQuery("#thumb_set").show('fold');
 		 else
                jQuery("#thumb_set").hide('fold');
