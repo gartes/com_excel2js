@@ -49,13 +49,21 @@ class Excel2jsModelBackup extends JModelLegacy {
 		
 		return $this->_db->loadObjectList('language');
 	}
-	
+
+	/**
+	 * Получить список точек восстановления
+	 * @return array
+	 * @since 3.9
+	 */
 	function getBackups() {
 		$query = "SELECT  *, DATE_FORMAT(date, '%d.%m.%Y %H:%i:%s') AS date2 FROM #__excel2js_backups ORDER BY date DESC";
-		
 		return $this->_getList($query);
 	}
-	
+
+	/**
+	 * Создание точки восстановления
+	 * @since 3.9
+	 */
 	function new_backup() {
 		$time_start = $this->getmicrotime();
 		$resp       = new stdClass();
@@ -279,6 +287,9 @@ class Excel2jsModelBackup extends JModelLegacy {
 	}
 	
 	function restore() {
+
+
+
 		$this->table->load($this->id);
 		$this->table->dateFormat('date', 'd.m.Y H:i:s');
 		if ( substr($this->table->file_name, -3) == 'sql' ) {
@@ -293,18 +304,38 @@ class Excel2jsModelBackup extends JModelLegacy {
 			$file_handler = fopen(JPATH_ROOT . DS . 'administrator' . DS . 'components' . DS . 'com_excel2js' . DS . 'backup' . DS . $this->table->file_name, "r");
 			while (!feof($file_handler)) {
 				$counter++;
+
 				$query .= fgets($file_handler, 16192);
-				if ( substr(trim($query), -1) == ";" ) {
-					$this->_db->setQuery($query);
-					if ( $this->_db->execute() ) {
-						$success++;
-						$query = '';
+
+//				echo'<pre>';print_r(  $query );echo'</pre>'.__FILE__.' '.__LINE__;
+
+				try
+				{
+				    // Code that may throw an Exception or Error.
+					if ( substr(trim($query), -1) == ";" ) {
+						$this->_db->setQuery($query);
+						if ( $this->_db->execute() ) {
+							$success++;
+							$query = '';
+						}
 					}
+				    // throw new Exception('Code Exception '.__FILE__.':'.__LINE__) ;
 				}
+				catch (Exception $e)
+				{
+					echo'<pre>';print_r( $query );echo'</pre>'.__FILE__.' '.__LINE__;
+					
+				    // Executed only in PHP 5, will not be reached in PHP 7
+				    echo 'Выброшено исключение: ',  $e->getMessage(), "\n";
+				    echo'<pre>';print_r( $e );echo'</pre>'.__FILE__.' '.__LINE__;
+				    die(__FILE__ .' '. __LINE__ );
+				}
+
 				
 				
 			}
-			
+//			die(__FILE__ .' '. __LINE__ );
+
 			if ( $success )
 				echo JText::_('DATA_SUCCESSFULLY_RECOVERED_AT_THE_TIME_OF') . $this->table->date . ". <br>Количество запросов - $success";
 			else

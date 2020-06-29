@@ -570,11 +570,13 @@
 					# "Создаётся бэкап таблиц магазина"
 					$this->status = JText::_( 'BACKUP_OF_TABLES' );
 					$this->updateStat();
-
+					# Способ создания Backup'a
 					if( $this->config->backup_type )
+						#gzip
 						$this->backup2( $this->backup_tables_array );
 					else
 					{
+						#sql
 						$this->backup( $this->backup_tables_array );
 					}
 				}
@@ -1198,8 +1200,15 @@ $data->read($this->path_to_file . $filename);*/
 				$tables[ $key ] = str_replace( "#__" , $this->_db->getPrefix() , $t );
 			}
 			$backup_filename = "js_backup_" . date( "d.m.Y_H_i_s" ) . ".gz";
-			$mainframe = JFactory:: getApplication();
-			$command = "mysqldump -h" . $mainframe->get( 'host' ) . " -u" . $mainframe->get( 'user' ) . " -p" . $mainframe->get( 'password' ) . " " . $mainframe->get( 'db' ) . " " . implode( " " , $tables ) . " | gzip -9> " . JPATH_ROOT . DS . 'administrator' . DS . 'components' . DS . 'com_excel2js' . DS . 'backup' . DS . $backup_filename;
+			try
+			{
+				$app = \Joomla\CMS\Factory:: getApplication();
+			} catch( Exception $e )
+			{
+				echo'<pre>';print_r( $e );echo'</pre>'.__FILE__.' '.__LINE__;
+				die(__FILE__ .' '. __LINE__ );
+			}
+			$command = "mysqldump -h" . $app->get( 'host' ) . " -u" . $app->get( 'user' ) . " -p" . $app->get( 'password' ) . " " . $app->get( 'db' ) . " " . implode( " " , $tables ) . " | gzip -9> " . JPATH_ROOT . DS . 'administrator' . DS . 'components' . DS . 'com_excel2js' . DS . 'backup' . DS . $backup_filename;
 			system( $command , $output );
 			if( $output === 0 )
 			{
@@ -1265,7 +1274,8 @@ $data->read($this->path_to_file . $filename);*/
 			$size = filesize( JPATH_ROOT . DS . 'administrator' . DS . 'components' . DS . 'com_excel2js' . DS . 'backup' . DS . $backup_filename );
 			if( $size )
 			{
-				$this->_db->setQuery( "INSERT INTO #__excel2js_backups SET file_name = '$backup_filename',size='$size'" );
+
+				$this->_db->setQuery( "INSERT INTO #__gnz11_core_backups SET file_name = '$backup_filename',size='$size'" );
 				$this->_db->execute();
 
 				return true;
